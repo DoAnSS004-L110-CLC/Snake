@@ -165,7 +165,7 @@ void che_do_choi(Tro_Choi& game_ran) {
 	gotoXY(M_R / 2 - 16, M_C / 2);	cout << "Moi ban quay lai sau!";
 	int nhan_phim_esc_de_thoat;
 	do
-		nhan_phim_esc_de_thoat = inputKey();
+		nhan_phim_esc_de_thoat = inputkey();
 	while (nhan_phim_esc_de_thoat != 27);
 }
 
@@ -228,7 +228,7 @@ void diem_cao_nhat(Tro_Choi& game_ran) {
 	gotoXY(M_R / 2 - 0, M_C / 2);		cout << game_ran.get_diem_cao_nhat();
 	int nhan_phim_esc_de_thoat;
 	do
-		nhan_phim_esc_de_thoat = inputKey();
+		nhan_phim_esc_de_thoat = inputkey();
 	while (nhan_phim_esc_de_thoat != 27);
 }
 
@@ -243,7 +243,7 @@ void cach_choi(Tro_Choi& game_ran) {
 	gotoXY(M_R / 2 - 28, M_C / 2 + 3);		cout << "Nhan phim \"ESC\" de thoat.                                    ";
 	int nhan_phim_esc_de_thoat;
 	do
-		nhan_phim_esc_de_thoat = inputKey();
+		nhan_phim_esc_de_thoat = inputkey();
 	while (nhan_phim_esc_de_thoat != 27);
 }
 
