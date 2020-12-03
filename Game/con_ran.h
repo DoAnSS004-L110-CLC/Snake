@@ -9,8 +9,8 @@ typedef struct thanran {
 	thanran* next;
 }Than_Ran;
 typedef struct toa_do_tuong {
-	Toa_Do p_dau;
-	Toa_Do p_cuoi;
+	Toa_Do p_dau{};
+	Toa_Do p_cuoi{};
 	vector<Toa_Do> vat_can;
 } Toa_Do_Tuong;
 
