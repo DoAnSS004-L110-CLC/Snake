@@ -64,7 +64,7 @@ void Con_Ran::set_toc_do(int td) {
 	toc_do = td;
 }
 
-void them_node(Than_Ran* con_ran, const Toa_Do& toadomoi) {
+void them_node(Than_Ran*& con_ran, const Toa_Do& toadomoi) {
 	if (con_ran == NULL) {
 		con_ran = new Than_Ran;
 		con_ran->toadoxy.x = toadomoi.x;
