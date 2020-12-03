@@ -1,4 +1,4 @@
-﻿#pragma once // tránh đụng độ thư viện khi gọi chồng file lên nhau
+#pragma once // tránh đụng độ thư viện khi gọi chồng file lên nhau
 #include <stdio.h>
 #include <conio.h>
 #include<string.h>
@@ -46,6 +46,20 @@ void ShowCur(bool CursorVisibility)
 	SetConsoleCursorInfo(handle, &cursor);
 }
 //======= trả về mã phím người dùng bấm =========
+
+//int inputKey(){
+//	while (!_kbhit()) {
+//		int key = _getch();
+//		if (key == 224)
+//		{
+//			key = _getch();
+//			return key + 1000;
+//		}
+//		return key;
+//	}
+//	return -1;
+//}
+
 int inputkey() {
 	if (_kbhit()) {
 		int key = _getch();
