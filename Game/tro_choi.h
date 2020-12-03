@@ -29,7 +29,7 @@ public:
 	void su_kien_ran_an_moi();
 	void su_kien_ran_di_chuyen();
 
-	void hien_thi_ran();
+	void hien_thi_ran() const;
 	void hien_thi_moi();
 
 	int get_diem_cao_nhat() const;
@@ -75,7 +75,10 @@ bool nhan_esc(int M_C = 35, int M_R = 152) {
 			SetColor(15);
 			cout << "  Tiep tuc   ";
 		}
-		int key = inputKey();
+		int key;
+		do 
+			key = inputkey();
+		while (key == -1);
 		if (key == 1077) a += 1;
 		else if (key == 1075) a -= 1;
 		else if (key == 13) {
@@ -95,13 +98,9 @@ bool nhan_esc(int M_C = 35, int M_R = 152) {
 int time_dung(int tocdo, int huongdichuyen) {
 	int tgian = 1000 / tocdo;
 	switch (huongdichuyen) {
-	case 1: tgian *= int(tgian * 2.2);
+	case 1: tgian = int(tgian * 2.2);
 		break;
-	case 2: tgian *= int(tgian * 2.2);
-		break;
-	case 3: tgian *= 1;
-		break;
-	case 4: tgian *= 1;
+	case 2: tgian = int(tgian * 2.2);
 		break;
 	}
 	return tgian;
@@ -126,13 +125,14 @@ void Tro_Choi::khoi_tao_ran() {
 	con_ran = new Con_Ran;
 	con_ran->set_toc_do(muc_do * 10);
 }
-inline void xoa_ran(Than_Ran abc) {
-	gotoXY(abc.toadoxy.x, abc.toadoxy.y);		cout << " ";
+inline void xoa_duoi_ran(const Toa_Do& toadoduoiran) {
+	gotoXY(toadoduoiran.x, toadoduoiran.y);		cout << " ";
 }
 
 void Tro_Choi::bat_dau_game() {
 	gotoXY(25, 6);		cout << get_che_do_choi();
 	gotoXY(22, 8);		cout << get_muc_do();
+
 	if(con_ran==NULL)	khoi_tao_ran();
 	else {
 		delete con_ran;	con_ran = NULL;
@@ -147,12 +147,11 @@ void Tro_Choi::bat_dau_game() {
 		hien_thi_moi();
 
 		const int key = inputkey();
-
-		if ((key == 1072 && con_ran->get_huong_di_chuyen() == 1) || (key == 1080 && con_ran->get_huong_di_chuyen() == 2))
-			Sleep(45);
-		else if ((key == 1077 && con_ran->get_huong_di_chuyen() == 3) || (key == 1075 && con_ran->get_huong_di_chuyen() == 4))
-			Sleep(20);
-		else Sleep(time_dung(con_ran->get_toc_do(), con_ran->get_huong_di_chuyen()));
+		//1072 1077 1080 1075
+		if (con_ran->get_huong_di_chuyen() == 1 || con_ran->get_huong_di_chuyen() == 2)
+			Sleep(time_dung(con_ran->get_toc_do(), con_ran->get_huong_di_chuyen()));
+		else if (con_ran->get_huong_di_chuyen() == 3 || con_ran->get_huong_di_chuyen() == 4)
+			Sleep(time_dung(con_ran->get_toc_do(), con_ran->get_huong_di_chuyen()));
 
 		switch (key) {
 		case 27: if (nhan_esc()) {
@@ -198,17 +197,12 @@ void Tro_Choi::ket_thuc_game() {
 	SetColor(15);
 	int nhan_phim_esc_de_thoat;
 	do
-		nhan_phim_esc_de_thoat = inputKey();
+		nhan_phim_esc_de_thoat = inputkey();
 	while (nhan_phim_esc_de_thoat != 27);
 	//xoa con ran
 	delete con_ran;
 	con_ran = NULL;
 	return;
-}
-void duoi_ran(Than_Ran* rangoc, Than_Ran& bansao) {
-	while (rangoc->next != NULL)
-		rangoc = rangoc->next;
-	bansao = *rangoc;
 }
 
 /*===============================================================*/
@@ -220,8 +214,13 @@ void Tro_Choi::set_tuong(int x, int xx, int y, int yy) {
 void Tro_Choi::set_diem_cao_nhat(int dcn) {
 	diem_cao_nhat = dcn;
 }
-void Tro_Choi::set_trang_thai(int tt) {
-	if (tt == 0)trang_thai = "BAT DAU";
+void Tro_Choi::set_trang_thai(int trangthai) {
+	switch (trangthai) {
+	case 0: trang_thai = "BAT DAU";
+		break;
+	case 1: trang_thai = "KET THUC";
+		break;
+	}
 }
 void Tro_Choi::set_muc_do(int md) {
 	muc_do = md;
@@ -229,7 +228,7 @@ void Tro_Choi::set_muc_do(int md) {
 
 /*===============================================================*/
 
-bool kt(const Than_Ran* ran, const Toa_Do_Tuong& toadotuong , const Toa_Do& conmoi) {
+bool kiem_tra_toa_do_con_moi(const Than_Ran* ran, const Toa_Do_Tuong& toadotuong , const Toa_Do& conmoi) {
 	while (ran != NULL) {
 		if (ran->toadoxy.x == conmoi.x && ran->toadoxy.y == conmoi.y) return true;
 		ran = ran->next;
@@ -245,15 +244,14 @@ int tao_so_ngau_nhien(int a, int b) {
 /*===============================================================*/
 
 void Tro_Choi::su_kien_ran_di_chuyen() {
-	Than_Ran abc;
-	duoi_ran(con_ran->con_ran(), abc);
+	Toa_Do toa_do_duoi_ran =	node_duoi_ran(con_ran->con_ran());
 	con_ran->ran_di_chuyen();
 	if (con_ran->ran_die(vachtuong)) {
 		set_trang_thai(1);
 		return;
 	}
 	su_kien_ran_an_moi();
-	xoa_ran(abc);
+	xoa_duoi_ran(toa_do_duoi_ran);
 }
 void Tro_Choi::su_kien_ran_an_moi() {
 	if (con_ran->con_ran()->toadoxy.x == con_moi.x && con_ran->con_ran()->toadoxy.y == con_moi.y) {
@@ -268,14 +266,15 @@ void Tro_Choi::tao_con_moi() {
 		con_moi.x = tao_so_ngau_nhien(vachtuong.p_dau.x + 1, vachtuong.p_cuoi.x - 1);
 		con_moi.y = tao_so_ngau_nhien(vachtuong.p_dau.y + 1, vachtuong.p_cuoi.y - 1);
 		SetColor(15);
-	} while (kt(con_ran->con_ran(),vachtuong,  con_moi));
+	} while (kiem_tra_toa_do_con_moi(con_ran->con_ran(),vachtuong,  con_moi));
 }
-void Tro_Choi::hien_thi_ran() {
-	Than_Ran abc = *con_ran->con_ran();
-	gotoXY(abc.toadoxy.x, abc.toadoxy.y);		cout << "X";
-	while (abc.next != NULL) {
-		abc = *abc.next;
-		gotoXY(abc.toadoxy.x, abc.toadoxy.y);		cout << "O";
+void Tro_Choi::hien_thi_ran() const {
+	Than_Ran* conran = con_ran->con_ran();
+	gotoXY(conran->toadoxy.x, conran->toadoxy.y);		cout << "X";
+	conran = conran->next;
+	while (conran != NULL) {
+		gotoXY(conran->toadoxy.x, conran->toadoxy.y);		cout << "O";
+		conran = conran->next;
 	}
 }
 void Tro_Choi::hien_thi_moi() {
@@ -284,8 +283,6 @@ void Tro_Choi::hien_thi_moi() {
 }
 
 /*===============================================================*/
-
-
 
 int Tro_Choi::get_diem_cao_nhat() const  {
 	return diem_cao_nhat;
