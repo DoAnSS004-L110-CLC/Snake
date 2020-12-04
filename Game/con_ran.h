@@ -11,7 +11,6 @@ typedef struct thanran {
 typedef struct toa_do_tuong {
 	Toa_Do p_dau{};
 	Toa_Do p_cuoi{};
-	vector<Toa_Do> vat_can;
 } Toa_Do_Tuong;
 
 class Con_Ran {
@@ -30,7 +29,7 @@ public:
 
 	Than_Ran* con_ran();
 
-	bool ran_die(const Toa_Do_Tuong&);
+	bool ran_die(const Toa_Do_Tuong&, const vector<Toa_Do>&);
 	int get_toc_do() const;
 	int get_chieu_dai_ran() const;
 	int get_huong_di_chuyen() const;
@@ -43,6 +42,24 @@ Toa_Do node_duoi_ran(Than_Ran* rangoc) {
 	while (ran->next != NULL)
 		ran = ran->next;
 	return ran->toadoxy;
+}
+void them_node(Than_Ran*& con_ran, const Toa_Do& toadomoi) {
+	if (con_ran == NULL) {
+		con_ran = new Than_Ran;
+		con_ran->toadoxy.x = toadomoi.x;
+		con_ran->toadoxy.y = toadomoi.y;
+		con_ran->next = NULL;
+	}
+	else them_node(con_ran->next, toadomoi);
+}
+void di_chuyen_than_ran(Than_Ran* ran, const Toa_Do& toadocu) {
+	if (ran == NULL) return;
+	Toa_Do toa_do_node_than_ran_trc_khi_di_chuyen = ran->toadoxy;
+	toa_do_node_than_ran_trc_khi_di_chuyen.x = ran->toadoxy.x;
+	toa_do_node_than_ran_trc_khi_di_chuyen.y = ran->toadoxy.y;
+
+	ran->toadoxy.x = toadocu.x;		ran->toadoxy.y = toadocu.y;
+	di_chuyen_than_ran(ran->next, toa_do_node_than_ran_trc_khi_di_chuyen);
 }
 
 Con_Ran::Con_Ran() {
@@ -62,25 +79,6 @@ void Con_Ran::set_huong_di_chuyen(int hdc) {
 }
 void Con_Ran::set_toc_do(int td) {
 	toc_do = td;
-}
-
-void them_node(Than_Ran*& con_ran, const Toa_Do& toadomoi) {
-	if (con_ran == NULL) {
-		con_ran = new Than_Ran;
-		con_ran->toadoxy.x = toadomoi.x;
-		con_ran->toadoxy.y = toadomoi.y;
-		con_ran->next = NULL;
-	}
-	else them_node(con_ran->next, toadomoi);
-}
-void di_chuyen_than_ran(Than_Ran* ran, const Toa_Do& toadocu) {
-	if (ran == NULL) return;
-	Toa_Do toa_do_node_than_ran_trc_khi_di_chuyen = ran->toadoxy;
-	toa_do_node_than_ran_trc_khi_di_chuyen.x = ran->toadoxy.x;
-	toa_do_node_than_ran_trc_khi_di_chuyen.y = ran->toadoxy.y;
-
-	ran->toadoxy.x = toadocu.x;		ran->toadoxy.y = toadocu.y;
-	di_chuyen_than_ran(ran->next, toa_do_node_than_ran_trc_khi_di_chuyen);
 }
 
 void Con_Ran::ran_di_chuyen() {
@@ -105,7 +103,7 @@ void Con_Ran::ran_an_moi() {
 	them_node(than_ran, toa_do_moi);
 }
 
-bool Con_Ran::ran_die(const Toa_Do_Tuong& toadotuong) {
+bool Con_Ran::ran_die(const Toa_Do_Tuong& toadotuong, const vector<Toa_Do>& vatcan) {
 	Than_Ran dau_ran = *than_ran;
 	Than_Ran* than_bung_ran = dau_ran.next;
 
@@ -118,8 +116,8 @@ bool Con_Ran::ran_die(const Toa_Do_Tuong& toadotuong) {
 	//ran dung vach tuong
 	if (dau_ran.toadoxy.x == toadotuong.p_dau.x || dau_ran.toadoxy.x == toadotuong.p_cuoi.x ||
 		dau_ran.toadoxy.y == toadotuong.p_dau.y || dau_ran.toadoxy.y == toadotuong.p_cuoi.y) return true;
-	for (size_t i = 0; i < toadotuong.vat_can.size(); i++)
-		if (dau_ran.toadoxy.x == toadotuong.vat_can.at(i).x && dau_ran.toadoxy.y == toadotuong.vat_can.at(i).y) return true;
+	for (size_t i = 0; i < vatcan.size(); i++)
+		if (dau_ran.toadoxy.x == vatcan.at(i).x && dau_ran.toadoxy.y == vatcan.at(i).y) return true;
 
 	return false;
 }
