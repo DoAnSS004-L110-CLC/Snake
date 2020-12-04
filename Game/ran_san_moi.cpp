@@ -143,8 +143,15 @@ void ve_tuong(Tro_Choi& game_ran) {
 		gotoXY(M_R - 3 * M_C - 2, i);
 		cout << "  ";
 	}
+	//in vat can
+	for (size_t i = 0; i < game_ran.get_vatcan().size(); i++) {
+		gotoXY(game_ran.get_vatcan().at(i).x, game_ran.get_vatcan().at(i).y);
+		cout << " ";
+	}
 	SetColor(15);
 }
+
+/*==========================================================================*/
 
 void bat_dau_choi(Tro_Choi& game_ran) {
 	system("cls");
@@ -163,6 +170,8 @@ void che_do_choi(Tro_Choi& game_ran) {
 	ve_khung();
 	gotoXY(M_R / 2 - 16, M_C / 2 - 1);	cout << "Tinh nang dang duoc cap nhap...";
 	gotoXY(M_R / 2 - 16, M_C / 2);	cout << "Moi ban quay lai sau!";
+	//
+
 	int nhan_phim_esc_de_thoat;
 	do
 		nhan_phim_esc_de_thoat = inputkey();
@@ -221,11 +230,25 @@ void muc_do(Tro_Choi& game_ran) {
 	game_ran.set_muc_do(mucdo);
 }
 
+int so_chu_so(int a) {
+	int i = 0;
+	while (a != 0) {
+		i++;
+		a /= 10;
+	}
+	return i;
+}
 void diem_cao_nhat(Tro_Choi& game_ran) {
 	system("cls");
 	ve_khung();
 	gotoXY(M_R / 2 - 7, M_C / 2 - 1);		cout << "Diem cao nhat:";
-	gotoXY(M_R / 2 - 0, M_C / 2);		cout << game_ran.get_diem_cao_nhat();
+	
+	for (int i = 0; i < 5; i++) {
+		int diem = game_ran.get_list_diem_cao_nhat(i);
+		if (diem == 0) continue;
+		gotoXY(M_R / 2 + 1 - so_chu_so(diem), M_C / 2 + i);		cout << diem;
+	}
+
 	int nhan_phim_esc_de_thoat;
 	do
 		nhan_phim_esc_de_thoat = inputkey();
@@ -236,17 +259,18 @@ void cach_choi(Tro_Choi& game_ran) {
 	system("cls");
 	ve_khung();
 	gotoXY(M_R / 2 - 5, M_C / 2 - 4);		cout << "Cach choi:";
-	gotoXY(M_R / 2 - 28, M_C / 2 - 3);		cout << "------------------------------------------------------------";
-	gotoXY(M_R / 2 - 28, M_C / 2 - 1);		cout << "Su dung bon phim mui ten len - xuong - trai - phai de dieu";
-	gotoXY(M_R / 2 - 28, M_C / 2);			cout << "khien con trai an moi; neu de ran cham tuong hay tu can vao";
-	gotoXY(M_R / 2 - 28, M_C / 2 + 1);		cout << "than thi game se ket thuc.                                    ";
-	gotoXY(M_R / 2 - 28, M_C / 2 + 3);		cout << "Nhan phim \"ESC\" de thoat.                                    ";
+	gotoXY(M_R / 2 - 27, M_C / 2 - 3);		cout << "----------------------------------------------------------";
+	gotoXY(M_R / 2 - 27, M_C / 2 - 1);		cout << "Su dung bon phim mui ten len - xuong - trai - phai de dieu";
+	gotoXY(M_R / 2 - 27, M_C / 2);			cout << "khien con ran an moi; neu de ran cham tuong hay tu can vao";
+	gotoXY(M_R / 2 - 27, M_C / 2 + 1);		cout << "than thi game se ket thuc.                                    ";
+	gotoXY(M_R / 2 - 27, M_C / 2 + 3);		cout << "Nhan phim \"ESC\" de thoat.                                    ";
 	int nhan_phim_esc_de_thoat;
 	do
 		nhan_phim_esc_de_thoat = inputkey();
 	while (nhan_phim_esc_de_thoat != 27);
 }
 
+/*==========================================================================*/
 
 int main() {
 	srand(unsigned int(time(NULL)));
