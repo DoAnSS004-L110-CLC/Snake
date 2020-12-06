@@ -1,4 +1,4 @@
-Đồ án cuối kì SS004.L1.6: Snake C++
+Đồ án cuối kì SS004.L1.6 nhóm 19: Snake C++
 
 Thành viên:
  - Phan Huy Mạnh 19521828
