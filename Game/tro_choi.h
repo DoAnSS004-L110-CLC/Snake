@@ -2,8 +2,6 @@
 #include"che_do_choi.h"
 #include"con_ran.h"
 
-static int bien_kiem_tra = 0;
-
 class Tro_Choi {
 private:
 	Con_Ran* con_ran;
