@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include"che_do_choi.h"
 #include"con_ran.h"
 
@@ -143,12 +143,7 @@ bool nhan_esc(int M_C = 35, int M_R = 152) {
 }
 int time_dung(int tocdo, int huongdichuyen) {
 	int tgian = 1000 / tocdo;
-	switch (huongdichuyen) {
-	case 1: tgian = int(tgian * 2.2);
-		break;
-	case 2: tgian = int(tgian * 2.2);
-		break;
-	}
+	if (huongdichuyen == 1 || huongdichuyen == 2) tgian = int(tgian * 2.2);
 	return tgian;
 }
 
@@ -188,7 +183,7 @@ void Tro_Choi::bat_dau_game() {
 	tao_con_moi();
 	while (true) {
 		gotoXY(24, 10);		cout << "       ";
-		gotoXY(24, 10);		cout << get_tong_diem();
+		gotoXY(24, 10);		cout << tong_diem;
 		hien_thi_ran();
 		hien_thi_moi();
 
@@ -240,12 +235,12 @@ void Tro_Choi::ket_thuc_game() {
 		gotoXY(vachtuong.p_cuoi.x * 2 / 3 - 4, vachtuong.p_cuoi.y / 2);				cout << "KET THUC";
 	}
 	SetColor(15);
+	delete con_ran;
+	con_ran = NULL;
 	int nhan_phim_esc_de_thoat;
 	do
 		nhan_phim_esc_de_thoat = inputkey();
 	while (nhan_phim_esc_de_thoat != 27);
-	delete con_ran;
-	con_ran = NULL;
 	return;
 }
 
@@ -292,11 +287,9 @@ void Tro_Choi::save_diem(const int& diem) {
 
 /*================================================================================*/
 
-bool kiem_tra_toa_do_con_moi(const Than_Ran* ran, const vector<Toa_Do>& vatcan, const Toa_Do& conmoi, const int& cdo) {
-	while (ran != NULL) {
-		if (ran->toadoxy.x == conmoi.x && ran->toadoxy.y == conmoi.y) return true;
-		ran = ran->next;
-	}
+bool kiem_tra_toa_do_con_moi(const vector<Toa_Do>& ran, const vector<Toa_Do>& vatcan, const Toa_Do& conmoi, const int& cdo) {
+	for (size_t i = 0; i < ran.size(); i++)
+		if (conmoi.x == ran.at(i).x && conmoi.y == ran.at(i).y) return true;
 	for (size_t i = 0; i < vatcan.size(); i++) {
 		int x = vatcan.at(i).x;
 		int y = vatcan.at(i).y;
@@ -318,7 +311,7 @@ int tao_so_ngau_nhien(int a, int b) {
 /*================================================================================*/
 
 void Tro_Choi::su_kien_ran_di_chuyen() {
-	Toa_Do toa_do_duoi_ran =	node_duoi_ran(con_ran->con_ran());
+	Toa_Do toa_do_duoi_ran = con_ran->con_ran().at(con_ran->con_ran().size() - 1);
 	con_ran->ran_di_chuyen(che_do_choi.get_che_do(), vachtuong, che_do_choi.get_vatcan());
 	if (con_ran->ran_die(vachtuong, che_do_choi.get_vatcan(), che_do_choi.get_che_do())) {
 		set_trang_thai(false);
@@ -328,7 +321,7 @@ void Tro_Choi::su_kien_ran_di_chuyen() {
 	xoa_duoi_ran(toa_do_duoi_ran);
 }
 void Tro_Choi::su_kien_ran_an_moi() {
-	if (con_ran->con_ran()->toadoxy.x == con_moi.x && con_ran->con_ran()->toadoxy.y == con_moi.y) {
+	if (con_ran->con_ran().at(0).x == con_moi.x && con_ran->con_ran().at(0).y == con_moi.y) {
 		tong_diem += get_muc_do();
 		con_ran->ran_an_moi();
 		tao_con_moi();
@@ -342,12 +335,10 @@ void Tro_Choi::tao_con_moi() {
 	} while (kiem_tra_toa_do_con_moi(con_ran->con_ran(), che_do_choi.get_vatcan(), con_moi, che_do_choi.get_che_do()));
 }
 void Tro_Choi::hien_thi_ran() const {
-	Than_Ran* conran = con_ran->con_ran();
-	gotoXY(conran->toadoxy.x, conran->toadoxy.y);		cout << "X";
-	conran = conran->next;
-	while (conran != NULL) {
-		gotoXY(conran->toadoxy.x, conran->toadoxy.y);		cout << "O";
-		conran = conran->next;
+	gotoXY(con_ran->con_ran().at(0).x, con_ran->con_ran().at(0).y);		cout << "X";
+	for (size_t i = 1; i < con_ran->get_chieu_dai_ran(); i++) {
+		gotoXY(con_ran->con_ran().at(i).x, con_ran->con_ran().at(i).y);
+		cout << "O";
 	}
 }
 void Tro_Choi::hien_thi_moi() const  {
