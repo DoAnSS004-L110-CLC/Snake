@@ -336,7 +336,7 @@ void Tro_Choi::tao_con_moi() {
 }
 void Tro_Choi::hien_thi_ran() const {
 	gotoXY(con_ran->con_ran().at(0).x, con_ran->con_ran().at(0).y);		cout << "X";
-	for (size_t i = 1; i < con_ran->get_chieu_dai_ran(); i++) {
+	for (size_t i = 1; i < con_ran->con_ran().size(); i++) {
 		gotoXY(con_ran->con_ran().at(i).x, con_ran->con_ran().at(i).y);
 		cout << "O";
 	}
